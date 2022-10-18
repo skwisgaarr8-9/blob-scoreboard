@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sign Up
+{% endblock %}
+
+{% block main %}
+    <h1>Welcome to Blob Scoreboard!</h1>
+    <form action="/scoreboard" method="post">
+        <div id="players" class="players">
+            <input id="player1" autocomplete="off" autofocus class="form-control mx-auto w-auto" name="player" placeholder="Player 1" type="text" required>
+            <input id="player2" autocomplete="off" class="form-control mx-auto w-auto" name="player" placeholder="Player 2" required>
+            <input id="player3" autocomplete="off" class="form-control mx-auto w-auto" name="player" placeholder="Player 3" required>
+        </div>
+        <button hidden type="button" id="remove-player" class="btn btn-dark">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-dash-fill" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11 7.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
+                <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            </svg>
+        </button>
+        <button type="button" id="add-player" class="btn btn-dark">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+            </svg>
+        </button>
+        <button id="play_button" class="btn btn-primary">Let's play!</button>
+    </form>
+    <dialog class="error" id="error">
+        <h1>HEY NOW!</h1>
+        <p>7 players is the max!</p>
+        <button type="button" class="btn btn-primary" id="close">Close</button>
+    </dialog>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        
+        //set minimum player count
+        let player_count = 3;
+        //max player count is 7 players. if user tries to add another player,
+        //show error modal
+        document.getElementById('add-player').onclick = function () {
+            if (player_count == 7) {
+                document.getElementById('error').showModal();
+                document.getElementById('close').onclick = function() {
+                    document.getElementById('error').close();
+                }
+            }
+            //else if player count is < 7, increment player count, add new input element for new player
+            //show remove player button
+            else 
+            {
+                player_count++;
+                let new_player = document.createElement('input');
+                new_player.setAttribute('id', 'player' + player_count);
+                new_player.setAttribute('autocomplete', 'off');
+                new_player.setAttribute('class', 'form-control mx-auto w-auto');
+                new_player.setAttribute('name', 'player');
+                new_player.setAttribute('placeholder', 'Player ' + player_count);
+                document.querySelector('#players').appendChild(new_player);
+                document.getElementById('remove-player').removeAttribute('hidden');
+            }
+        //when remove player button clicked, remove the most recently added player,
+        //then decrement player count
+        //if player count is 3 (minimum player count), hide remove player button
+        document.getElementById('remove-player').onclick = function (){
+            document.getElementById('player' + player_count).remove();
+            player_count--;
+            if (player_count == 3) {
+                document.getElementById('remove-player').setAttribute('hidden', true);
+            }
+        }
+        }
+        
+    </script>
+
+
+{% endblock %}

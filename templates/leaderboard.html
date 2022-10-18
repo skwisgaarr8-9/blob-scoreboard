@@ -1,0 +1,30 @@
+{% extends "layout.html" %} 
+
+{% block title %} 
+    Leaderboard
+{% endblock %} 
+
+{% block main %}
+
+    <h1>Leaderboard!</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Wins</th>
+                <th>Blobs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+            <tr>
+                <th>{{player["name"]}}</th>
+                    <td>{{player["wins"]}}</td>
+                    <td>{{player["blobs"]}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %} 

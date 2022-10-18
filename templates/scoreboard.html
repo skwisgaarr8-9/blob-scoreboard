@@ -1,0 +1,484 @@
+{% extends "layout.html" %} 
+
+{% block title %} 
+    ScoreBoard
+{% endblock %} 
+
+{% block main %}
+<form action="/leaderboard" method="post">
+    <h1>Score Board</h1>
+    <button id="confirm" type="button" class="btn btn-primary">Confirm Bets</button>
+    <div id="scoreboard" class="table-responsive">
+        <table class="table table-bordered table-sm">
+            <thead>            
+                    <tr id="players">
+                        <th class="w-25" scope="col">Name</th>
+                        {% for player in players %}
+                            <th scope="col">{{ player }}</th>
+                        {% endfor %}
+                    </tr>           
+            </thead>
+            <tbody>
+                <tr id="row1">
+                    <th class="w-25" scope="row">1</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                </tr>
+                <tr id="row2">
+                    <th class="w-25" scope="row">2</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row3">
+                    <th class="w-25" scope="row">3</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row4">
+                    <th class="w-25" scope="row">4</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row5">
+                    <th class="w-25" scope="row">5</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row6">
+                    <th class="w-25" scope="row">6</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row7">
+                    <th class="w-25" scope="row">7</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row8">
+                    <th class="w-25" scope="row">7</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row9">
+                    <th class="w-25" scope="row">6</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row10">
+                    <th class="w-25" scope="row">5</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row11">
+                    <th class="w-25" scope="row">4</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row12">
+                    <th class="w-25" scope="row">3</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row13">
+                    <th class="w-25" scope="row">2</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row14">
+                    <th class="w-25" scope="row">1</th>
+                        {% for player in players %}
+                            <td><input disabled autocomplete="off" min="0" max="7" type="number"></td>
+                        {% endfor %}
+                        
+                </tr>
+                <tr id="row15">
+                    <th class="w-25" id="bets" scope="row">Total Bets</th>
+                        {% for player in players %}
+                            <td>0</td>
+                        {% endfor %}
+                </tr>
+                <tr id="row16">
+                    <th class="w-25" id="blobs" scope="row">Total Blobs</th>
+                        {% for player in players %}
+                            <td>0</td>
+                        {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <dialog class="welcome" id="welcome">
+        <h1>WELCOME TO BLOB!</h1>
+        <p>Already know how to play? Get going then!<br>If not, let's go over some rules.
+        </p>
+        <ul id="welcome-message">
+            <li>Hearts are trump suit, aces are high.</li>
+            <li>Your bet should be between 0 and the number of cards in your hand.</li>
+            <li>If you don't match your bet <u><em>exactly</em></u> then you blob that round!</li>
+            <li>The sum of all bets for that round <u><em>cannot</em></u> equal the round number. Someone has to blob every round!</li>
+            <li>You must play the lead suit if you have it, even if you have a heart that would beat it.</li>
+            <li><b>To mark the bet as a blob, double click the cell of the bet.</b></li>
+            <li><b>Be careful when blobbing. At the moment, blobs cannot be undone.</b></li>
+        </ul>
+        <button type="button" class="btn btn-primary" id="welcome_btn">Let's Go! </button>
+    </dialog>
+    <dialog class="error" id="error">
+        <h1>ERROR!</h1>
+        <p id="error_msg"></p>
+        <button type="button" class="btn btn-primary" id="close">Close</button>
+    </dialog>
+    <dialog class="winner" id="winner">
+        <h1>CONGRATULATIONS!</h1>
+        <p id="congratulations"></p>
+        <form action="/leaderboard" method="post">
+            <button id="congrats_btn" type="submit" class="btn btn-warning">Leaderboard</button>
+        </form>
+    </dialog>
+</form>
+    
+    <script>
+        //set a count variable to keep track of round.
+        let count = 1;
+        current_round = document.getElementById('row' + count);
+        //all inputs are set to disabled by default to control what round play is on.
+        //on window load, rewrite each first-round cell to be enabled.
+        window.onload = function () {
+            document.getElementById('welcome').showModal();
+            document.getElementById('welcome_btn').onclick = function (){
+                document.getElementById('welcome').close();
+            
+            }
+            document.getElementById('welcome').addEventListener('cancel', (event) => {
+                    event.preventDefault();
+            });
+            for (let i = 1; i < (current_round.cells.length); i++){
+                current_round.cells[i].innerHTML = '<input onfocus="this.value=\'\'" autocomplete="off" min="0" max="7" required type="number">';
+            }
+        
+        }
+        //set function of confirm bet button.
+        //when clicked, create list to gather bet values,
+        //set variable to keep track of round number,
+        //set variable to check total sum of bets.
+        document.getElementById('confirm').onclick = function () {
+            current_round = document.getElementById('row' + count);
+            let values = [];
+            let round_number = current_round.cells[0].innerHTML;
+            let total_bets = 0;
+            //fill values list with each player's bet.
+            for (let i = 1; i < current_round.cells.length; i++){
+                    values.push(parseInt(current_round.cells[i].children[0].value));
+                    }
+            //error checking the bets
+            for (let i = 0; i < values.length; i++){
+                //is bet too high?
+                //if so, show error message.
+                if (values[i] > round_number){
+                    highBetError();
+                    return;
+                }
+                //did each player enter a bet?
+                //if not, show error message.
+                else if (isNaN(values[i])){
+                    emptyBetError();
+                    return;
+                }
+                //did the player enter a negative number?
+                //if so, show error message.
+                else if (values[i] < 0){
+                    negativeBetError();
+                    return;
+                }
+            }
+            //calculate sum of each player's bet.
+            for (let i = 0; i < values.length; i++){
+                total_bets = total_bets + values[i];
+            }
+            //does the sum of bets equal the round? 
+            //if so, show error message.
+            if (total_bets == round_number){
+                dealerBetError();
+                return;
+            }
+            //once all bets have been checked, change innerhtml of cell from an input to a <p> element.
+            for ( let i = 0; i < values.length; i++){
+                    current_round.cells[i + 1].innerHTML = '<p class="bet" onclick="blob()">'+values[i]+'</p>';
+                }
+            
+            //set variable to hold each player's total bets
+            let sum = 0;
+            let player_bets = document.getElementById('row15');
+            //for loop to go through each player's bet.
+            //bet_var is the current total of their bets.
+            //sum is the current round's bet.
+            //add bet_var and sum to get all of the player's bet so far.
+            //change the innerhtml of the player's total bets cell to bet_var.
+            for (let i = 1; i < current_round.cells.length; i++){
+                let bet_var = parseInt(player_bets.cells[i].textContent);
+                sum = parseInt(current_round.cells[i].textContent);
+                bet_var += sum;
+                player_bets.cells[i].innerHTML = '<p>'+bet_var+'</p>';
+            }
+            //increment count meaning move to the next round.
+            count++;
+            //check for end of game and winner.
+            //if count has reached 15, change confirm bet button to calculate winner button.
+            //when the calculate winner button is clicked, run the calculate function.
+            if (count == 15){
+                let confirm_button = document.getElementById('confirm');
+                confirm_button.innerHTML = 'Calculate Winner';
+                confirm_button.setAttribute("onclick", "calculate()");   
+            }
+            //after incrementing count, get the new current round.
+            current_round = document.getElementById('row' + count);
+            for (let i = 1; i < (current_round.cells.length); i++){
+                //if the count is 15, the game is over so break the loop.
+                if (count == 15){
+                    break;
+                //if the count is < 15, the game is still going
+                //move to the next row of inputs, change their innerhtml to remove the diabled attribute.
+                } else {
+                    current_round.cells[i].innerHTML = '<input onfocus="this.value=\'\'" autocomplete="off" min="0" max="7" required type="number">';
+                }    
+            }       
+                    
+        }
+
+        //function to calculate winner of the game.
+        function calculate(){
+            //gather the name of each player.
+            let players = document.getElementById('players');
+            //gather the total blobs of each player.
+            let player_blobs = document.getElementById('row16');
+            //gather the total bets of each player.
+            let player_bets = document.getElementById('row15');
+            //use the first player's number of blobs as an initial value 
+            //for least blobs.
+            let least_blobs = parseInt(player_blobs.cells[1].textContent);
+            //use the first player's number of bets as an initial value
+            //for most bets.
+            let winning_bets = parseInt(player_bets.cells[1].textContent);
+            //use the first player's name as winner.
+            let winner = players.cells[1].textContent;
+            //set a variable to check for tie later.
+            let tie_counter = 0;
+
+            //loop through and compare each player's blob count.
+            //if any player has less blobs than set in least_blobs,
+            //set that player's blobs to least_blobs; set that player's name to winner;
+            //set that player's total bets to winning_bets
+            //reset tie_counter to 0
+            for (let i = 2; i < player_blobs.cells.length; i++){
+                if (parseInt(player_blobs.cells[i].textContent) < least_blobs){
+                    least_blobs = parseInt(player_blobs.cells[i].textContent);
+                    winner = players.cells[i].textContent;
+                    winning_bets = parseInt(player_bets.cells[i].textContent);
+                    tie_counter = 0;
+                //if a player's total blobs are the same as least_blobs,
+                //compare bets. if the current winning_bets is higher, continue on the loop.
+                } else if (parseInt(player_blobs.cells[i].textContent) == least_blobs) {
+                    if (winning_bets > parseInt(player_bets.cells[i].textContent)){
+                        continue;
+                    // if the winning bets AND the least blobs are the same for the two players, increment tie counter.    
+                    } else if (winning_bets == parseInt(player_bets.cells[i].textContent) && least_blobs == parseInt(player_blobs.cells[i].textContent)){
+                        tie_counter++;
+                    }
+                    //else the player has a lower number of blobs than the current winner.
+                    //set that player's blobs to the least blobs, that player's bets to winning_bets,
+                    //and that player's name to winner. set tie_counter to 0. 
+                    else {
+                        least_blobs = parseInt(player_blobs.cells[i].textContent);
+                        winner = players.cells[i].textContent;
+                        winning_bets = parseInt(player_bets.cells[i].textContent);
+                        tie_counter = 0;
+                    }
+                }
+            }
+            //in order to send player names, number of blobs, and number of bets to python, the data must come
+            //from an input. may have been a better way like using jquery or ajax but not familiar with those
+            //and i couldn't find an actual way. my work around was to use javascript to change the innerhtml
+            //of those cells to inputs and use javascript to write in values to those input fields when the
+            //calculate winner button was pressed at the end of the game. 
+            for (let i = 1; i < players.cells.length; i++){
+                //store player name in player_name; change the cell to an input; write the player's name into the input field
+                let player_name = players.cells[i].textContent;
+                players.cells[i].innerHTML = '<input id="player'+i+'" class="results" name="player" type="text">';    
+                document.getElementById('player' + i).value = player_name;
+                //store player bet in player_bet; change the cell to an input; write the player's bets into the input field
+                let player_bet = parseInt(player_bets.cells[i].textContent);
+                player_bets.cells[i].innerHTML = '<input id="bet'+i+'" class="results" name="bets" type="number">';
+                document.getElementById('bet' + i).value = player_bet;
+                //store player blob in player_blob; change the cell to an input; write the player's blobs into the input field
+                let player_blob = parseInt(player_blobs.cells[i].textContent);
+                player_blobs.cells[i].innerHTML = '<input id="blob'+i+'" class="results" name="blobs" type="number">';
+                document.getElementById('blob' + i).value = player_blob;
+            }
+
+            //get winner dialog
+            let winner_dialog = document.getElementById('winner');
+            //get <p> element of winner dialog 
+            let congratulations = document.getElementById('congratulations');
+            //if tie_counter is > 0, there is a tie.
+            //in the event of a tie, create modal with appropriate message.
+            //make modal button refresh the page on click. 
+            //no statistics are kept for ties.
+            if (tie_counter > 0){
+                congratulations.innerHTML = 'The game is over! It was a tie! BORING!';
+                let congrats_btn = document.getElementById('congrats_btn');
+                congrats_btn.innerHTML = 'Play again?';
+                congrats_btn.setAttribute("type", "button");
+                congrats_btn.onclick = function() {
+                    location.reload();
+                };
+                winner_dialog.showModal();
+            //prevent the end modal from closing by esc or clicking out
+                document.getElementById('winner').addEventListener('cancel', (event) => {
+                    event.preventDefault();
+                });
+            //else there is no tie. fill <p> element with winner message and winner's name.
+            } else{
+                congratulations.innerHTML = 'The game is over! '+winner+' is the winner!';
+                winner_dialog.showModal();
+                // prevent the end modal from closing by esc or clicking out
+                document.getElementById('winner').addEventListener('cancel', (event) => {
+                    event.preventDefault();
+            });
+            }
+            
+
+        }
+
+        //function to change incorrect bets to blobs.
+        function blob(){
+            //get <p> element has has a bet in it
+            let bets = document.getElementsByClassName('bet');
+            //get the row of total bets for each player
+            let player_bets = document.getElementById('row15');
+            //get the row of total blobs for each player
+            let player_blobs = document.getElementById('row16');
+            //loop through each cell that has a bet.
+            for (let i = 0; i < bets.length; i++){
+                //when that cell is clicked,
+                bets[i].onclick = function(){
+                    //if the cell has already been blobbed, do nothing.
+                    if (bets[i].textContent == ''){
+                        return;
+                    }else {
+                    //get the player's total number of bets,
+                    let bet_var = parseInt(player_bets.cells[bets[i].parentNode.cellIndex].textContent);
+                    //get the bet that was incorrect,
+                    let blob_bet = parseInt(bets[i].innerHTML);
+                    //get the player's total number of blobs.
+                    let blob_var = parseInt(player_blobs.cells[bets[i].parentNode.cellIndex].textContent);
+                    //remove the incorrect bet from the player's total bets.
+                    bet_var -= blob_bet;
+                    //set the updated total bets of the player.
+                    player_bets.cells[bets[i].parentNode.cellIndex].innerHTML = '<p>'+bet_var+'</p>';
+                    //change the incorrect bet's cell to a block dot symbolizing a blob.
+                    bets[i].innerHTML = '<span class="dot"></span>';
+                    //increment the player's blob total.
+                    blob_var++;
+                    //update the player's total blobs with blob_var.
+                    player_blobs.cells[bets[i].parentNode.cellIndex].innerHTML = '<p>'+blob_var+'</p>';
+                    }
+                    }
+                }
+                }
+            
+                
+            
+            //function for if player did not enter a bet.
+            function emptyBetError(){
+                //access the error dialog element.
+                let error = document.getElementById('error');
+                let close_button = document.getElementById('close');
+                let error_msg = document.getElementById('error_msg');
+                //set the error message for the dialog's <p> element.
+                error_msg.innerHTML = 'Everyone needs to enter a bet!';
+                //show the dialog.
+                error.showModal();
+                //close dialog when user presses the close button.
+                close_button.onclick = function () {
+                error.close();
+                }
+                
+                
+            }
+
+            //function for if the player's bet is too high
+            function highBetError(){
+                //access the error dialog element.
+                let error = document.getElementById('error');
+                let close_button = document.getElementById('close');
+                let error_msg = document.getElementById('error_msg');
+                //set error message for the dialog's <p> element.
+                error_msg.innerHTML = 'Bets can\'t be higher than the number of cards in your hand!';
+                //show the dialog.
+                error.showModal();
+                //close the dialog when the user presses the close button.
+                close_button.onclick = function () {
+                error.close();
+                }
+            }
+
+            //function for if the dealer's bet causes the total number of that round's bets
+            //to equal the round number.
+            function dealerBetError(){
+                //access the error dialog element.
+                let error = document.getElementById('error');
+                let close_button = document.getElementById('close');
+                let error_msg = document.getElementById('error_msg');
+                //set the error message for the dialog's <p> element.
+                error_msg.innerHTML = 'The dealer can\'t bet that!';
+                //show the dialog.
+                error.showModal();
+                //close the dialog when the user presses the close button.
+                close_button.onclick = function () {
+                error.close();
+                }
+            }
+
+            //function for if any of the bet's are a negative number.
+            function negativeBetError(){
+                //access the error dialog element.
+                let error = document.getElementById('error');
+                let close_button = document.getElementById('close');
+                let error_msg = document.getElementById('error_msg');
+                //set the error message for the dialog's <p> element.
+                error_msg.innerHTML = 'Really? A negative bet?';
+                //show the dialog.
+                error.showModal();
+                //close the dialog when the user presses the close button.
+                close_button.onclick = function () {
+                error.close();
+                }
+            }
+        
+            
+    </script>
+
+{% endblock %} 
